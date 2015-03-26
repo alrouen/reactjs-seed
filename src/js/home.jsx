@@ -16,29 +16,7 @@ function injectRouter( cl ) {
 }
 
 
-class NavBar extends React.Component {
-    constructor( props ) {
-        super( props );
-    }
 
-    render() {
-        return (
-            <nav className="navbar navbar-default">
-              <div className="container-fluid">
-                <div className="navbar-header">
-                  <a className="navbar-brand" href="#">React movie</a>
-                </div>
-
-                <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul className="nav navbar-nav">
-                    <li><a href="#">My movies</a></li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-        );
-    }
-}
 
 /**
  *
@@ -52,10 +30,7 @@ class Home extends React.Component {
 
     render(){
         return (
-            <div id="wrapper">
-                <NavBar/>
-                <Router.RouteHandler />
-            </div>
+            <Router.RouteHandler />
         );
     }
 }
