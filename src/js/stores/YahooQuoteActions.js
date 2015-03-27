@@ -30,6 +30,6 @@ YahooQuoteActions.removeQuoteSymbols.shouldEmit = (symbols) => symbols && symbol
 //YahooQuoteActions.getQuotes.listenAndPromise( QuoteApi.getQuotes );
 
 // As we use now "fetch" for API request, if we want to get the json, we get another promise for that when calling .json()
-YahooQuoteActions.getQuotes.listen( ( symbols ) => QuoteApi.getQuotes( symbols ).then( ( response ) => response.json() ) );
+YahooQuoteActions.getQuotes.listen( QuoteApi.getQuotes );
 
 module.exports = YahooQuoteActions;
