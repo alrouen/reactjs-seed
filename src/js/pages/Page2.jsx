@@ -16,6 +16,7 @@ class Page2 extends React.Component {
         // Auto-bind
         this.onSubmit = this.onSubmit.bind(this);
         this.onReset = this.onReset.bind(this);
+        this.onChangeMovies = this.onChangeMovies.bind(this);
         this._setAndValidateContact = this._setAndValidateContact.bind(this);
     }
 
@@ -52,28 +53,16 @@ class Page2 extends React.Component {
         };
     }
 
-    seqLinkState(path) {
-        return {
-            value: Utils.getIn(this.state, path),
-            requestChange: (value, anythingElse) => {
-                console.log(value);
-                var setOfMovies = Immutable.Set.of(...this.state.contact.favoriteMovies).withMutations( movies => {
-                    if(movies.get(value)) {
-                        movies.remove(value);
-                    } else {
-                        movies.add(value);
-                    }
-                });
-                console.log(setOfMovies.toArray());
-                this.state.contact.favoriteMovies = setOfMovies.toArray();
-                this.setState(this.state);
+    onChangeMovies(e) {
+        var options = e.target.options;
+        var selected = [];
+        for(let i =0; i < options.length; i++) {
+            let option = options[i];
+            if(option.selected) {
+                selected.push(option.value);
             }
         }
-    }
-
-    onChange(e){
-        console.log(e.target.value);
-        console.log(e.target.options);
+        this._setAndValidateContact("contact.favoriteMovies", selected);
     }
 
     isFormValid(){ return FormValidation.isFormValid(this.state.formState); }
@@ -133,13 +122,15 @@ class Page2 extends React.Component {
                             </div>
                         </div>
 
-                        <!-- valueLink={this.seqLinkState("contact.favoriteMovies")} -->
-
                         <div className="form-group">
-                            <select className="form-control" multiple={true} onChange={this.onChange}>
-                                {Page2.movies.toSeq().map( (v, i) => <option key={i} value={v}>{v}</option> )}
-                            </select>
+                            <div className="col-sm-6">
+                                <label>Your favorite movies (min. 1):</label>
+                                <select className="form-control" multiple={true} value={this.state.contact.favoriteMovies} onChange={this.onChangeMovies}>
+                                    {Page2.movies.toSeq().map( (v, i) => <option key={i} value={v}>{v}</option> )}
+                                </select>
+                            </div>
                         </div>
+
                         <div className="form-group">
                             <div className="col-sm-6">
                                 <label className="checkbox-inline">
@@ -179,6 +170,7 @@ Page2.formValidator = new FormValidation({
     "contact.language"  : Validate.notEmpty,
     "contact.age"       : Validate.gte(5),
     "contact.gender"    : Validate.notEmpty,
+    "contact.favoriteMovies" : Validate.minLength(1),
     "contact.tscs"      : (value) => value == true
 });
 
